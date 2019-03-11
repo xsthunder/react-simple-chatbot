@@ -6,10 +6,19 @@ import Options from './Options';
 import OptionsStepContainer from './OptionsStepContainer';
 
 class OptionsStep extends Component {
+
+  ref = React.createRef()
+
   onOptionClick = ({ value }) => {
     const { triggerNextStep } = this.props;
 
     triggerNextStep({ value });
+  }
+
+  componentDidMount(){
+    if(this.ref){
+      this.ref.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
   }
 
   renderOption = (option) => {
@@ -39,7 +48,11 @@ class OptionsStep extends Component {
     const { options } = step;
 
     return (
-      <OptionsStepContainer className="rsc-os">
+      <OptionsStepContainer className="rsc-os"
+        ref={x => {
+          this.ref = x
+        }}
+      >
         <Options className="rsc-os-options">
           {Object.values(options).map(this.renderOption)}
         </Options>

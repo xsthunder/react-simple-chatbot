@@ -11,6 +11,7 @@ class TextStep extends Component {
   state = {
     loading: true,
   };
+  ref = React.createRef()
 
   componentDidMount() {
     const {
@@ -22,6 +23,9 @@ class TextStep extends Component {
     const { component, delay, waitAction } = step;
     const isComponentWatingUser = component && waitAction;
 
+    if(this.ref){
+      this.ref.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
     setTimeout(() => {
       this.setState({ loading: false }, () => {
         if (!isComponentWatingUser && !step.rendered) {
@@ -30,6 +34,7 @@ class TextStep extends Component {
         speak(step, previousValue);
       });
     }, delay);
+    
   }
 
   getMessage = () => {
@@ -59,6 +64,7 @@ class TextStep extends Component {
 
     return this.getMessage();
   }
+  
 
   render() {
     const {
@@ -76,7 +82,11 @@ class TextStep extends Component {
     const showAvatar = user ? !hideUserAvatar : !hideBotAvatar;
 
     return (
-      <TextStepContainer className={`rsc-ts ${user ? 'rsc-ts-user' : 'rsc-ts-bot'}`} user={user}>
+      <TextStepContainer className={`rsc-ts ${user ? 'rsc-ts-user' : 'rsc-ts-bot'}`} user={user}
+        ref={x => {
+          this.ref = x
+        }}
+      >
         <ImageContainer className="rsc-ts-image-container" user={user}>
           {
             isFirst && showAvatar && (
